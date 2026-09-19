@@ -1,11 +1,80 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmartLead AI - Yönetim Paneli</title>
 </head>
 <body>
     <h1>Yönetim Paneli</h1>
-    <p>Panel sayfası çalışıyor.</p>
+    <p>İletişim taleplerini görüntülemek için yönetici şifrenizi girin.</p>
+
+    <form id="login-form">
+        <input
+            id="password-input"
+            type="password"
+            placeholder="Yönetici şifresi"
+            aria-label="Yönetici şifresi"
+            autocomplete="off"
+            required
+        >
+        <button type="submit">Kayıtları Göster</button>
+    </form>
+
+    <p id="status" role="status"></p>
+    <div id="contacts"></div>
+
+    <script>
+        const form = document.getElementById("login-form");
+        const passwordInput = document.getElementById("password-input");
+        const status = document.getElementById("status");
+        const contacts = document.getElementById("contacts");
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const password = passwordInput.value;
+            passwordInput.value = "";
+            contacts.replaceChildren();
+            status.textContent = "Kayıtlar yükleniyor...";
+
+            try {
+                const response = await fetch("/api/leads", {
+                    method: "GET",
+                    headers: {
+                        "X-Admin-Password": password
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.basari) {
+                    status.textContent = data.error || "Kayıtlar alınamadı.";
+                    return;
+                }
+
+                status.textContent = "Kayıt sayısı: " + data.contacts.length;
+
+                for (const contact of data.contacts) {
+                    const item = document.createElement("div");
+
+                    const name = document.createElement("h2");
+                    name.textContent = contact.name;
+
+                    const email = document.createElement("p");
+                    email.textContent = "E-posta: " + contact.email;
+
+                    const message = document.createElement("p");
+                    message.textContent = "Mesaj: " + contact.message;
+
+                    item.append(name, email, message);
+                    contacts.appendChild(item);
+                }
+            } catch (error) {
+                status.textContent = "Sunucuya bağlanılamadı.";
+            }
+        });
+    </script>
 </body>
 </html>
