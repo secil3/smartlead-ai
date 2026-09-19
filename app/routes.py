@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.ai_service import get_ai_reply
+from app.services.ai_service import get_ai_reply, AIServiceError
 from app.database import save_contact_request, get_contact_requests
 import secrets
 from config import ADMIN_PASSWORD
@@ -131,8 +131,14 @@ def chat():
     ):
         reply = start_contact_flow(flow)
     else:
-        reply = get_ai_reply(message, history)
-
+        try:
+            reply = get_ai_reply(message, history)
+        except AIServiceError:
+            return jsonify({
+                "basari": False,
+                "error": "Yapay zeka servisi su anda kullanilamiyor."
+            }), 503
+            
     return jsonify({
     "reply": reply,
     "contact_flow": {"step": flow["step"]},
