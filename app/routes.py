@@ -94,17 +94,26 @@ def chat():
     data = request.get_json(silent=True) or {}
 
     if not isinstance(data, dict):
-        return jsonify({"error": "Gecersiz istek."}), 400
+            return jsonify({
+            "basari": False,
+            "error": "Gecersiz istek."
+            }), 400
 
     message = data.get("message", "")
     history = data.get("history", [])
     flow = get_contact_flow()
 
     if not isinstance(message, str) or not message.strip():
-        return jsonify({"error": "Lutfen bir mesaj girin."}), 400
+        return jsonify({
+        "basari": False,
+        "error": "Lutfen bir mesaj girin."
+        }), 400
 
     if not isinstance(history, list) or len(history) > 20:
-        return jsonify({"error": "Gecersiz sohbet gecmisi."}), 400
+        return jsonify({
+        "basari": False,
+        "error": "Gecersiz sohbet gecmisi."
+        }), 400
 
     for item in history:
         if (
@@ -114,7 +123,10 @@ def chat():
             or not item["content"].strip()
             or len(item["content"]) > 2000
         ):
-            return jsonify({"error": "Gecersiz sohbet gecmisi."}), 400
+            return jsonify({
+            "basari": False,
+            "error": "Gecersiz sohbet gecmisi."
+            }), 400
 
 
     message = message.strip()
@@ -160,9 +172,10 @@ def chat():
                 "error": "Yapay zeka servisi su anda kullanilamiyor."
             }), 503
             
-    return jsonify({
-    "reply": reply,
-    "contact_flow": {"step": flow["step"]},
-    })
+        return jsonify({
+        "basari": True,
+        "reply": reply,
+        "contact_flow": {"step": flow["step"]}
+        })
     
     
