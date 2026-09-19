@@ -19,10 +19,6 @@ from app.session_store import get_contact_flow
 main = Blueprint("main", __name__)
 
 
-@main.route("/")
-def home():
-    return "SmartLead AI calisiyor!"
-
 
 @main.route("/health", methods=["GET"])
 def health():
