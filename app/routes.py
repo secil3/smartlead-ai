@@ -24,6 +24,12 @@ def home():
     return "SmartLead AI calisiyor!"
 
 
+@main.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
+@main.route("/api/leads", methods=["POST"])
 @main.route("/contact", methods=["POST"])
 def contact():
     data = request.get_json(silent=True) or {}
@@ -34,26 +40,37 @@ def contact():
 
     if not all(isinstance(value, str) and value.strip()
                for value in (name, email, message)):
-        return jsonify({"error": "Ad, e-posta ve mesaj zorunludur."}), 400
-
+            return jsonify({
+                "basari": False,
+                "error": "Ad, e-posta ve mesaj zorunludur."
+                }), 400
+        
     name = name.strip()
     email = email.strip()
     message = message.strip()
 
     if len(name) > 100 or len(email) > 254 or len(message) > 2000:
-        return jsonify({"error": "Girilen bilgiler cok uzun."}), 400
+        return jsonify({
+            "basari": False,
+            "error": "Girilen bilgiler cok uzun."
+        }), 400
 
     if "@" not in email or email.startswith("@") or email.endswith("@"):
-        return jsonify({"error": "Gecerli bir e-posta adresi girin."}), 400
+        return jsonify({
+            "basari": False,
+            "error": "Gecerli bir e-posta adresi girin."
+        }), 400
 
     request_id = save_contact_request(name, email, message)
 
     return jsonify({
+        "basari": True,
         "message": "Iletisim talebiniz kaydedildi.",
         "request_id": request_id
     }), 201
     
     
+@main.route("/api/leads", methods=["GET"])
 @main.route("/admin/contacts", methods=["GET"])
 def admin_contacts():
     provided_password = request.headers.get("X-Admin-Password", "")
@@ -63,11 +80,15 @@ def admin_contacts():
     ):
         return jsonify({"error": "Yetkisiz erisim."}), 401
 
-    return jsonify({"contacts": get_contact_requests()})
+    return jsonify({
+    "basari": True,
+    "contacts": get_contact_requests()
+    })
 
 
 
 
+@main.route("/api/sohbet", methods=["POST"])
 @main.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json(silent=True) or {}
