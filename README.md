@@ -49,7 +49,7 @@ smartlead-ai/
 
 
 
-Mimari
+## Mimari
 Projede sorumluluklar ayrı modüllere bölünmüştür:
 - routes.py: API isteklerini ve uygulama akışını yönetir.
 - database.py: Veritabanı işlemlerini yönetir.
@@ -58,7 +58,7 @@ Projede sorumluluklar ayrı modüllere bölünmüştür:
 - session_store.py: Ziyaretçilere ait geçici iletişim oturumlarını yönetir.
 - pages.py: Ana sayfa ve yönetici paneli sayfalarını sunar.
 - config.py: Ortam değişkenleri ve uygulama ayarlarını içerir.
-Kurulum
+## Kurulum
 Projeyi klonladıktan sonra sanal ortam oluşturun:
 python -m venv .venv
 
@@ -85,7 +85,7 @@ Başarılı durumda:
 {"status":"ok"}
 
 yanıtı alınır.
-API Endpointleri
+## API Endpointleri
 - GET /health
   Backend servisinin çalışıp çalışmadığını kontrol eder.
 - POST /api/sohbet
@@ -96,7 +96,7 @@ API Endpointleri
   Yönetici yetkilendirmesi ile iletişim taleplerini getirir.
 - GET /dashboard
   Yönetici panelini görüntüler.
-Canlı Proje
+## Canlı Proje
 Backend:
 https://smartlead-ai-zkg4.onrender.com
 DigiPath web sitesi:
