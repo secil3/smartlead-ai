@@ -15,11 +15,8 @@ def create_app():
     app.config.from_object(config["development"])
     app.json.ensure_ascii = False
 
-    CORS(
-        app,
-        origins=app.config["CORS_ORIGINS"],
-        supports_credentials=True
-    )
+    
+    CORS(app, supports_credentials=True)
 
     with app.app_context():
         init_db()

@@ -11,9 +11,9 @@ class Config:
     DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///smartlead.db")
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
     AI_PROVIDER = os.environ.get("AI_PROVIDER", "groq")
-    CORS_ORIGINS = os.environ.get( 
-        "CORS_ORIGINS",
-        "http://localhost:3000").split(",")
+    
+    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SECURE = True
     
     BUSINESS_CONTEXT = ("""
         Sen SmartLead AI'sın. DigiPath markasının dijital asistanısın.
