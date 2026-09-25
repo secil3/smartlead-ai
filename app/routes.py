@@ -96,7 +96,16 @@ def chat():
 
     message = data.get("message", "")
     history = data.get("history", [])
-    flow = get_contact_flow()
+    
+    session_id = data.get("session_id")
+
+    if not isinstance(session_id, str) or not session_id.strip():
+        return jsonify({
+        "basari": False,
+        "error": "Gecersiz oturum."
+        }), 400
+
+    flow = get_contact_flow(session_id.strip())
 
     if not isinstance(message, str) or not message.strip():
         return jsonify({
