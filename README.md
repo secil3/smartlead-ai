@@ -100,10 +100,13 @@ yanıtı alınır.
   Yönetici panelini görüntüler.
   
 ## Canlı Proje
-Backend:
+
+**Backend:**  
 https://smartlead-ai-zkg4.onrender.com
-DigiPath web sitesi:
+
+**DigiPath Web Sitesi:**  
 https://secilkeser03.wixsite.com/digipath
+
 Güvenlik
 - API anahtarları ve gizli bilgiler .env dosyasında tutulur.
 - .env dosyası .gitignore ile GitHub dışında tutulur.
