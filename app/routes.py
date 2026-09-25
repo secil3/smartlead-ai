@@ -83,17 +83,16 @@ def admin_contacts():
 
 
 
-
 @main.route("/api/sohbet", methods=["POST"])
 @main.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json(silent=True) or {}
 
     if not isinstance(data, dict):
-            return jsonify({
+        return jsonify({
             "basari": False,
             "error": "Gecersiz istek."
-            }), 400
+        }), 400
 
     message = data.get("message", "")
     history = data.get("history", [])
@@ -101,14 +100,14 @@ def chat():
 
     if not isinstance(message, str) or not message.strip():
         return jsonify({
-        "basari": False,
-        "error": "Lutfen bir mesaj girin."
+            "basari": False,
+            "error": "Lutfen bir mesaj girin."
         }), 400
 
     if not isinstance(history, list) or len(history) > 20:
         return jsonify({
-        "basari": False,
-        "error": "Gecersiz sohbet gecmisi."
+            "basari": False,
+            "error": "Gecersiz sohbet gecmisi."
         }), 400
 
     for item in history:
@@ -120,45 +119,53 @@ def chat():
             or len(item["content"]) > 2000
         ):
             return jsonify({
-            "basari": False,
-            "error": "Gecersiz sohbet gecmisi."
+                "basari": False,
+                "error": "Gecersiz sohbet gecmisi."
             }), 400
-
 
     message = message.strip()
     step = flow["step"]
 
     if step == "name":
         reply = save_contact_name(flow, message)
+
     elif step == "email":
         reply = save_contact_email(flow, message)
+
     elif step == "message":
         reply = save_contact_message(flow, message)
+
     elif step == "confirm":
         reply = handle_contact_confirmation(flow, message)
 
         if flow["step"] == "approved":
             request_id = save_contact_request(
-            flow["name"],
-            flow["email"],
-            flow["message"],
+                flow["name"],
+                flow["email"],
+                flow["message"]
             )
 
             flow.clear()
             flow.update(new_contact_flow())
 
             reply = (
-            f"Iletisim talebiniz kaydedildi. "
-            f"Talep numaraniz: {request_id}"
+                f"Iletisim talebiniz kaydedildi. "
+                f"Talep numaraniz: {request_id}"
             )
+
     elif step == "approved":
         reply = "Onayiniz alindi. Kayit islemi henuz baglanmadi."
+
     elif message.lower() in (
         "iletisim talebi",
+        "iletişim talebi",
         "iletisim kurmak istiyorum",
+        "iletişim kurmak istiyorum",
         "benimle iletisime gecin",
+        "benimle iletişime geçin",
     ):
         reply = start_contact_flow(flow)
+
     else:
         try:
             reply = get_ai_reply(message, history)
@@ -167,11 +174,13 @@ def chat():
                 "basari": False,
                 "error": "Yapay zeka servisi su anda kullanilamiyor."
             }), 503
-            
-        return jsonify({
+
+    return jsonify({
         "basari": True,
         "reply": reply,
-        "contact_flow": {"step": flow["step"]}
-        })
+        "contact_flow": {
+            "step": flow["step"]
+        }
+    }), 200
     
     

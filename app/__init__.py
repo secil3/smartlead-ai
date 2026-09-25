@@ -1,6 +1,6 @@
-
 from flask import Flask
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 from app.routes import main
 from app.pages import pages
@@ -14,6 +14,13 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(config["development"])
     app.json.ensure_ascii = False
+
+    CORS(
+        app,
+        origins=app.config["CORS_ORIGINS"],
+        supports_credentials=True
+    )
+
     with app.app_context():
         init_db()
 
