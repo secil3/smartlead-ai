@@ -45,8 +45,8 @@ smartlead-ai/
 │   └── templates/
 │       ├── index.html
 │       └── dashboard.html
-└── .gitignore
-
+└── .gitignore 
+```
 
 
 ## Mimari
@@ -58,6 +58,7 @@ Projede sorumluluklar ayrı modüllere bölünmüştür:
 - session_store.py: Ziyaretçilere ait geçici iletişim oturumlarını yönetir.
 - pages.py: Ana sayfa ve yönetici paneli sayfalarını sunar.
 - config.py: Ortam değişkenleri ve uygulama ayarlarını içerir.
+  
 ## Kurulum
 Projeyi klonladıktan sonra sanal ortam oluşturun:
 python -m venv .venv
@@ -85,6 +86,7 @@ Başarılı durumda:
 {"status":"ok"}
 
 yanıtı alınır.
+
 ## API Endpointleri
 - GET /health
   Backend servisinin çalışıp çalışmadığını kontrol eder.
@@ -96,6 +98,7 @@ yanıtı alınır.
   Yönetici yetkilendirmesi ile iletişim taleplerini getirir.
 - GET /dashboard
   Yönetici panelini görüntüler.
+  
 ## Canlı Proje
 Backend:
 https://smartlead-ai-zkg4.onrender.com
